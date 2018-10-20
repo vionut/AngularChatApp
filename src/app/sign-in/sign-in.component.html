@@ -1,0 +1,16 @@
+<div class="formDiv">
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="ui form">
+    <div class="field">
+      <label>Email</label>
+      <input ngModel name="email" type="text" placeholder="Enter Email">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input ngModel name="password" type="text" placeholder="Enter Password">
+    </div>
+    <div style="text-align: center" class="field">
+      <a [routerLink]="['/sign-up']">Don't have an account? Register!</a>
+    </div>
+    <button class="ui button" type="submit">Submit</button>
+  </form>
+</div>
