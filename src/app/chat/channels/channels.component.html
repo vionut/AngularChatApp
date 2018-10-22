@@ -1,3 +1,10 @@
-<p>
-  channels works!
-</p>
+<div style="height:50%; max-height: 50%; overflow: auto">
+  <div class="ui list">
+    <div *ngFor="let c of channels; let i=index" class="item">
+      <img class="ui avatar image" [src]="c.coverUrl">
+      <div class="content">
+        <a class="header">c.name</a>
+        <!-- <div class="description">Last seen watching <a><b>Arrested Development</b></a> just now.</div> -->
+      </div>
+    </div>
+  </div>

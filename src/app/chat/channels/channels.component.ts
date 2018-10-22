@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SendBirdService } from 'src/app/sendbird.service';
 
 @Component({
   selector: 'app-channels',
@@ -6,8 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./channels.component.css']
 })
 export class ChannelsComponent implements OnInit {
+  channels;
 
-  constructor() { }
+  constructor(public sendbirdService: SendBirdService) { }
 
   ngOnInit() {
   }

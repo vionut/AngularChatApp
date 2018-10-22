@@ -20,6 +20,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { DataService } from './data.service';
 import { AuthGuardService } from './auth-guard.service';
 import { AuthService } from './auth.service';
+import { NavbarComponent } from './navbar/navbar.component';
+import { SendBirdService } from './sendbird.service';
 
 @NgModule({
   declarations: [
@@ -34,10 +36,11 @@ import { AuthService } from './auth.service';
     FooterComponent,
     AdminTableComponent,
     SignUpComponent,
-    SignInComponent
+    SignInComponent,
+    NavbarComponent
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpModule, HttpClientModule],
-  providers: [DataService, AuthGuardService, AuthService],
+  providers: [DataService, AuthGuardService, AuthService, SendBirdService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

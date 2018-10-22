@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SendBirdService } from '../sendbird.service';
 
 @Component({
   selector: 'app-chat',
@@ -6,10 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat.component.css']
 })
 export class ChatComponent implements OnInit {
+  loading = true;
+  chatUser;
 
-  constructor() { }
+  constructor(public sendbirdService: SendBirdService) { }
 
   ngOnInit() {
+    this.sendbirdService.connectToSb().subscribe(data => {
+      this.chatUser = data;
+      this.loading = false;
+    }, error => {
+      console.log(error);
+    })
   }
 
 }

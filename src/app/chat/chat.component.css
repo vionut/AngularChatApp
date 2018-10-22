@@ -1,0 +1,28 @@
+.wrapper {
+    width:100vw;
+    height:calc(100vh - 50px);
+    background-color:#eee;
+    display: flex;
+}
+
+.leftContainer {
+    width:20%;
+    border: 1px solid;
+    flex-grow: 1;
+}
+
+.mainContainer {
+    width:60%;
+    border: 1px solid;
+    flex-grow: 3;
+}
+
+.rightContainer {
+    width:20%;
+    border: 1px solid;
+    flex-grow: 1;
+}
+
+.loading {
+    
+}
