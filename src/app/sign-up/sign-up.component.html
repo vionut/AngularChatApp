@@ -1,3 +1,43 @@
-<p>
-  sign-up works!
-</p>
+<div class="formDiv">
+  <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="ui form">
+    <div class="field">
+      <label>First Name</label>
+      <input ngModel #firstName="ngModel" name="firstName" type="text" placeholder="Enter First Name" required
+        minlength="4">
+      <div *ngIf="firstName.errors?.required && firstName.touched" class="ui pointing red basic label">Please enter a
+        value</div>
+      <div *ngIf="firstName.errors?.minlength && firstName.touched" class="ui pointing red basic label">Please enter at
+        least 4 characters</div>
+    </div>
+    <div class="field">
+      <label>Last Name</label>
+      <input ngModel #lastName="ngModel" name="lastName" type="text" placeholder="Enter Last Name" required
+        minlength="4">
+      <div *ngIf="lastName.errors?.required && lastName.touched" class="ui pointing red basic label">Please enter a
+        value</div>
+      <div *ngIf="lastName.errors?.minlength && lastName.touched" class="ui pointing red basic label">Please enter at
+        least 4 characters</div>
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input ngModel #email="ngModel" name="email" type="email" placeholder="Enter Email" required email>
+      <div *ngIf="email.errors?.required && email.touched" class="ui pointing red basic label">Please enter a value</div>
+      <div *ngIf="email.errors?.email && email.touched" class="ui pointing red basic label">Please enter a valid email</div>
+    </div>
+    <div class="field">
+        <label>Password</label>
+        <input ngModel #pass="ngModel" name="password" type="password" placeholder="Enter Password" required>
+        <div *ngIf="pass.errors?.required && pass.touched" class="ui pointing red basic label">Please enter a value</div>
+      </div>
+    <div class="field">
+        <label>Repeat Password</label>
+        <input ngModel #repass="ngModel" name="repassword" type="password" required>
+        <div *ngIf="repass.errors?.required && repass.touched" class="ui pointing red basic label">Please enter a value</div>
+        <div *ngIf="repass.touched && !repass.errors?.required && repass.value!==pass.value" class="ui pointing red basic label">Password not matching</div>
+      </div>
+    <div style="text-align: center" class="field">
+      <a [routerLink]="['/sign-in']">Already have an account? Login!</a>
+    </div>
+    <button class="ui green button" [disabled]="form.invalid" type="submit">Submit</button>
+  </form>
+</div>
