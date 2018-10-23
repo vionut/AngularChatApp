@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-directory',
@@ -6,6 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./directory.component.css']
 })
 export class DirectoryComponent implements OnInit {
+  @Input() chatUsers;
+  @Input() channelUsers;
+  @Input() chatUser;
 
   constructor() { }
 

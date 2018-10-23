@@ -19,6 +19,15 @@ export class SendBirdService {
     this.token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
     this.user_id = this.token ? this.tokenHelper.decodeToken(this.token).user._id : null;
     this.sbClient = new SendBird({ appId: APP_ID });
+    this.createChannelHandlers();
+  }
+
+  createChannelHandlers() {
+    let channelHandler = new this.sbClient.ChannelHandler();
+    channelHandler.onMessageReceived = (channel, message) => {
+      console.log(channel, message);
+    };
+    this.sbClient.addChannelHandler("message received", channelHandler);
   }
 
   connectToSb() {
@@ -27,7 +36,7 @@ export class SendBirdService {
         this.user_id,
         (user, error) => {
           if (error) {
-            observer.error(error);
+            observer.error({ ...error, message: "Couldn't connect to sendbird" });
           }
           observer.next(user);
           observer.complete();
@@ -36,15 +45,89 @@ export class SendBirdService {
     });
   }
 
+  getAllChatUsers() {
+    const query = this.sbClient.createUserListQuery();
+    return new Observable(observer => {
+      query.next((users, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't get all users" });
+        }
+        observer.next(users);
+        observer.complete();
+      });
+    });
+  }
+
   getOpenChannels() {
     const openChannelListQuery = this.sbClient.OpenChannel.createOpenChannelListQuery();
-    openChannelListQuery.next((channels, error) => {
-      if (error) {
-        console.log(error);
-        return error;
-      }
-      console.log(channels);
-      return channels;
+    return new Observable(observer => {
+      openChannelListQuery.next((channels, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't get open channels" });
+        }
+        observer.next(channels);
+        observer.complete();
+      });
     });
+  }
+
+  getGroupChannels() {
+    const channelListQuery = this.sbClient.GroupChannel.createMyGroupChannelListQuery();
+    channelListQuery.includeEmpty = true;
+    return new Observable(observer => {
+      if (channelListQuery.hasNext) {
+        channelListQuery.next((channelList, error) => {
+          if (error) {
+            observer.error({ ...error, message: "Couldn't get group channels" });
+          }
+          observer.next(channelList);
+          observer.complete();
+        });
+      }
+    });
+  }
+
+  enterOpenChannel(channelUrl) {
+    return new Observable(observer => {
+      this.sbClient.OpenChannel.getChannel(channelUrl, (channel, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't find channel" });
+        }
+        channel.enter((response, error) => {
+          if (error) {
+            observer.error({ ...error, message: "Couldn't enter channel" });
+          }
+          observer.next(channel);
+          observer.complete();
+        });
+      });
+    });
+  }
+
+  loadChannelMessages(channel) {
+    const messageListQuery = channel.createPreviousMessageListQuery();
+    return new Observable(observer => {
+      messageListQuery.load(100, true, (messageList, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't load channel messages" });
+        }
+        observer.next(messageList.reverse());
+        observer.complete();
+      });
+    });
+  }
+
+  sendMessageToOpenChannel(channel, message) {
+    if (!message.attachments) {
+      return new Observable(observer => {
+        channel.sendUserMessage(message, (message, error) => {
+          if (error) {
+            observer.error({ ...error, message: "Couldn't send message" });
+          }
+          observer.next(message);
+          observer.complete();
+        });
+      });
+    }
   }
 }

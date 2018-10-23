@@ -1,0 +1,6 @@
+<div class="footerContainer">
+  <div class="ui action input">
+    <input [disabled]="inputDisabled" [(ngModel)]="message.text" type="text" placeholder="Enter message...">
+    <button (click)="onSend()" [disabled]="!message.text" class="ui button">Send</button>
+  </div>
+</div>

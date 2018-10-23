@@ -1,3 +1,9 @@
-<p>
-  message works!
-</p>
+<div class="messageContainer">
+  <div class="messageUser"  suiPopup [popupHeader]="message._sender.nickname" [popupText]="getDateFromMoment(message.createdAt)">
+    <img class="ui avatar image" [src]="message._sender.profileUrl">
+  </div>
+  <div class="messageText">{{message.message}}</div>
+</div>
+<!-- <div class="ui very relaxed list">
+  
+</div> -->

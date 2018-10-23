@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  Output,
+  EventEmitter
+} from '@angular/core';
 
 @Component({
   selector: 'app-chat-window',
@@ -6,10 +14,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./chat-window.component.css']
 })
 export class ChatWindowComponent implements OnInit {
+  @Input()
+  messages;
+  @Input()
+  currentChannel;
+  @Input()
+  chatUser;
 
-  constructor() { }
+  @Output()
+  userSentMessage: EventEmitter<any> = new EventEmitter<any>();
 
-  ngOnInit() {
+  @ViewChild('messagesDiv')
+  conversationDiv: ElementRef;
+
+  constructor() {}
+
+  ngOnInit() {}
+
+  scrollToBottom() {
+    setTimeout(() => {
+      this.conversationDiv.nativeElement.scrollTop = this.conversationDiv.nativeElement.scrollHeight;
+    }, 10);
   }
 
+  onMessageSent(message) {
+    this.userSentMessage.emit(message);
+  }
 }

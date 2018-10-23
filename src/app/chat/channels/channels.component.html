@@ -1,10 +1,15 @@
-<div style="height:50%; max-height: 50%; overflow: auto">
-  <div class="ui list">
-    <div *ngFor="let c of channels; let i=index" class="item">
+<div class="channelList">
+  <div class="ui small center aligned header">
+    CHANNELS
+  </div>
+  <div class="ui big very relaxed middle aligned selection list">
+    <div *ngFor="let c of channels; let i=index" class="item" (click)="enterOpenChannel(i)">
       <img class="ui avatar image" [src]="c.coverUrl">
       <div class="content">
-        <a class="header">c.name</a>
-        <!-- <div class="description">Last seen watching <a><b>Arrested Development</b></a> just now.</div> -->
+        <div class="header">{{c.name}}</div>
       </div>
     </div>
   </div>
+</div>
+
+

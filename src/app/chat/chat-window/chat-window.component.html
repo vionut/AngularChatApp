@@ -1,3 +1,12 @@
-<p>
-  chat-window works!
-</p>
+<div *ngIf="currentChannel" class="main-container">
+  <div class="windowHeader"></div>
+  <div #messagesDiv class="windowBody">
+    <app-message *ngFor="let m of messages" [message]="m"></app-message>
+  </div>
+  <div class="windowFooter">
+    <app-footer (messageSent)="onMessageSent($event)" [channel]="currentChannel" [chatUser]="chatUser"></app-footer>
+  </div>
+</div>
+<div class="noChannel" *ngIf="!currentChannel">
+  Please select a channel!
+</div>
