@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import * as SendBird from 'sendbird';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 const APP_ID = '1BD11D57-18D2-4226-8ABA-17DDCDCB26FD';
 
@@ -14,6 +13,10 @@ export class SendBirdService {
   token;
   user_id;
   tokenHelper = new JwtHelperService();
+  private _messageReceivedThroughHandler: Subject<any> = new Subject<any>();
+  get messageReceivedThroughHandler() {
+    return this._messageReceivedThroughHandler.asObservable();
+  }
 
   constructor() {
     this.token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
@@ -26,8 +29,9 @@ export class SendBirdService {
     let channelHandler = new this.sbClient.ChannelHandler();
     channelHandler.onMessageReceived = (channel, message) => {
       console.log(channel, message);
+      this._messageReceivedThroughHandler.next({ channel, message });
     };
-    this.sbClient.addChannelHandler("message received", channelHandler);
+    this.sbClient.addChannelHandler('message received', channelHandler);
   }
 
   connectToSb() {
@@ -129,5 +133,18 @@ export class SendBirdService {
         });
       });
     }
+  }
+
+  getChannelUsers(channel) {
+    const participantListQuery = channel.createParticipantListQuery();
+    return new Observable(observer => {
+      participantListQuery.next((participantList, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't get message users" });
+        }
+        observer.next(participantList);
+        observer.complete();
+      });
+    });
   }
 }

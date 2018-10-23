@@ -7,9 +7,10 @@
     <app-conversations [conversations]="conversations" [chatUser]="chatUser"></app-conversations>
   </div>
   <div class="mainContainer">
-    <app-chat-window (userSentMessage)="addSentMessageToArray($event)" #chatWindow [chatUser]="chatUser" [currentChannel]="currentChannel" [messages]="channelMessages"></app-chat-window>
+    <app-chat-window (userSentMessage)="addSentMessageToArray($event)" #chatWindow [chatUser]="chatUser" [currentChannel]="currentChannel"
+      [messages]="channelMessages"></app-chat-window>
   </div>
   <div class="rightContainer">
-    <app-directory [chatUser]="chatUser" [chatUsers]="allChatUsers"></app-directory>
+    <app-directory [channelUsers]="channelUsers" [chatUser]="chatUser" [chatUsers]="allChatUsers"></app-directory>
   </div>
 </div>

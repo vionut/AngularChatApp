@@ -3,12 +3,17 @@
     CHANNEL USERS
   </div>
   <div class="ui big very relaxed middle aligned selection list">
-    <div *ngFor="let u of channelUsers; let i=index" class="item">
-      <img class="ui avatar image" [src]="u.profileUrl">
-      <div class="content">
-        <div class="header">{{c.nickname}}</div>
+    <ng-container *ngFor="let u of channelUsers; let i=index">
+      <div *ngIf="u.nickname !== chatUser.nickname" class="item">
+        <img class="ui avatar image" [src]="u.profileUrl">
+        <div class="content">
+          <div class="header">{{u.nickname}}
+            <a *ngIf="u.connectionStatus === 'offline'" class="ui red empty circular label"></a>
+            <a *ngIf="u.connectionStatus === 'online'" class="ui green empty circular label"></a>
+          </div>
+        </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 </div>
 
@@ -17,13 +22,16 @@
     CHAT USERS
   </div>
   <div class="ui big very relaxed middle aligned selection list">
-    <div *ngFor="let usr of chatUsers; let i=index" class="item">
-      <ng-container *ngIf="usr.nickname !== chatUser.nickname">
+    <ng-container *ngFor="let usr of chatUsers; let i=index">
+      <div *ngIf="usr.nickname !== chatUser.nickname" class="item">
         <img class="ui avatar image" [src]="usr.profileUrl">
         <div class="content">
-          <div class="header">{{usr.nickname}}</div>
+          <div class="header">{{usr.nickname}}
+            <a *ngIf="usr.connectionStatus === 'offline'" class="ui red empty circular label"></a>
+            <a *ngIf="usr.connectionStatus === 'online'" class="ui green empty circular label"></a>
+          </div>
         </div>
-      </ng-container>
-    </div>
+      </div>
+    </ng-container>
   </div>
 </div>

@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-navbar',
   template: `
-  <div *ngIf="token" class="ui menu">
+  <div *ngIf="token && !isExpired" class="ui menu">
     <div class="header item">
       Angular chat
     </div>
@@ -39,9 +40,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   token;
+  isExpired;
   constructor() {}
 
   ngOnInit() {
     this.token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
+    const jwtHelper = new JwtHelperService();
+    this.isExpired = this.token ? jwtHelper.isTokenExpired(this.token) : true;
   }
 }

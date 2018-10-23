@@ -16,12 +16,28 @@ export class ChatComponent implements OnInit {
   conversations;
   currentChannel;
   channelMessages: any[] = [];
+  channelUsers: any[] = [];
   subs: Subscription[] = [];
 
   @ViewChild('chatWindow')
   chatWindow: ChatWindowComponent;
 
-  constructor(public sendbirdService: SendBirdService) {}
+  constructor(public sendbirdService: SendBirdService) {
+    const receiveMessageSub = this.sendbirdService.messageReceivedThroughHandler.subscribe(data => {
+      if (data.channel.channelType === 'open') {
+        if (this.currentChannel.url === data.channel.url) {
+          this.addSentMessageToArray(data.message);
+        }
+        this.sendbirdService
+          .sendMessageToOpenChannel(data.channel, data.message)
+          .subscribe((response: any) => {
+            console.log('Succesfully sent message: ', response.message);
+            console.log('To channel: ', response.channel);
+          });
+      }
+    });
+    this.subs.push(receiveMessageSub);
+  }
 
   ngOnInit() {
     this.init();
@@ -121,6 +137,23 @@ export class ChatComponent implements OnInit {
     this.currentChannel = channel;
     console.log('Successfully entered channel: ', channel);
     this.loadChannelMessages(channel);
+    this.loadChannelUsers(channel);
+  }
+
+  loadChannelUsers(channel) {
+    this.loading = true;
+    const loadChannelUsersSub = this.sendbirdService.getChannelUsers(channel).subscribe(
+      (data: any) => {
+        this.channelUsers = data;
+        this.loading = false;
+        console.log('Successfully got channel users: ', this.channelUsers);
+      },
+      error => {
+        this.loading = false;
+        console.log(error.message);
+      }
+    );
+    this.subs.push(loadChannelUsersSub);
   }
 
   loadChannelMessages(channel) {
