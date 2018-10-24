@@ -9,6 +9,8 @@ import { DataService } from '../data.service';
   styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent implements OnInit {
+  errorMessage;
+
   constructor(public dataService: DataService, public router: Router) {}
 
   ngOnInit() {}
@@ -27,7 +29,13 @@ export class SignUpComponent implements OnInit {
         this.router.navigate(['/chat']);
       },
       error => {
-        console.log(error);
+        if (error.status == 0) {
+          this.errorMessage = 'There might be a problem with the server, try again later!';
+          return;
+        }
+        if (error.error && error.error.message == 'Could not find user') {
+          this.errorMessage = 'This is not a valid user!';
+        }
       }
     );
   }

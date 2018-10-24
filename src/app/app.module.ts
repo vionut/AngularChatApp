@@ -23,6 +23,7 @@ import { AuthGuardService } from './auth-guard.service';
 import { AuthService } from './auth.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SendBirdService } from './sendbird.service';
+import { CheckPasswordDirective } from './sign-up/check-password.directive';
 
 @NgModule({
   declarations: [
@@ -38,10 +39,11 @@ import { SendBirdService } from './sendbird.service';
     AdminTableComponent,
     SignUpComponent,
     SignInComponent,
-    NavbarComponent
+    NavbarComponent,
+    CheckPasswordDirective
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpModule, HttpClientModule, SuiModule],
-  providers: [DataService, AuthGuardService, AuthService, SendBirdService],
+  providers: [DataService, AuthGuardService, AuthService, SendBirdService, CheckPasswordDirective],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
