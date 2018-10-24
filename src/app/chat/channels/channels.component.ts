@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { SendBirdService } from 'src/app/sendbird.service';
-import { ConversationsComponent } from '../conversations/conversations.component';
 import { Subscription } from 'rxjs';
 
 @Component({

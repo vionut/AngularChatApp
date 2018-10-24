@@ -37,21 +37,25 @@ export class FooterComponent implements OnInit {
       messageToSend = this.message.text;
       this.message.text = '';
     }
-    if (this.channel.channelType === 'open') {
-      const sendMessageSub = this.sendbirdService
-        .sendMessageToOpenChannel(this.channel, messageToSend)
-        .subscribe(
-          data => {
-            console.log('Successfully sent message: ', data);
-            this.inputDisabled = false;
-            this.messageSent.emit(data);
-          },
-          error => {
-            console.log(error.message);
-            this.inputDisabled = false;
-          }
-        );
-      this.subs.push(sendMessageSub);
+    const sendMessageSub = this.sendbirdService
+      .sendMessageToChannel(this.channel, messageToSend)
+      .subscribe(
+        data => {
+          console.log('Successfully sent message: ', data);
+          this.inputDisabled = false;
+          this.messageSent.emit(data);
+        },
+        error => {
+          console.log(error.message);
+          this.inputDisabled = false;
+        }
+      );
+    this.subs.push(sendMessageSub);
+  }
+
+  onInputEnterPressed(event) {
+    if (event.keyCode == 13) {
+      this.onSend();
     }
   }
 }

@@ -26,6 +26,7 @@ export class SignUpComponent implements OnInit {
     this.dataService.register(user).subscribe(
       (data: any) => {
         localStorage.setItem('token', data.response.token);
+        this.dataService._tokenChanged.next(true);
         this.router.navigate(['/chat']);
       },
       errorResponse => {

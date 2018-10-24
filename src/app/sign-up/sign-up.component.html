@@ -2,40 +2,40 @@
   <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="ui form">
     <div class="field">
       <label>First Name</label>
-      <input [ngStyle]="((firstName.errors?.required || firstName.errors?.minlength) && (firstName.touched || firstName.dirty)) && {'border': '0.5px solid red'}" ngModel #firstName="ngModel" name="firstName" type="text" placeholder="Enter First Name" required
-        minlength="4">
-      <div *ngIf="firstName.errors?.required && (firstName.touched || firstName.dirty)" class="ui pointing red basic label">Please enter a
-        value</div>
-      <div *ngIf="firstName.errors?.minlength && (firstName.touched || firstName.dirty)" class="ui pointing red basic label">Please enter at
-        least 4 characters</div>
+      <input [ngStyle]="((firstName.errors?.required || firstName.errors?.minlength) && (firstName.touched || firstName.dirty)) && {'border': '0.5px solid red'}"
+        ngModel #firstName="ngModel" name="firstName" type="text" placeholder="Enter First Name" required minlength="4">
+      <div *ngIf="firstName.errors?.required && (firstName.touched || firstName.dirty)" class="ui pointing red basic label">Please enter a value
+      </div>
+      <div *ngIf="firstName.errors?.minlength && (firstName.touched || firstName.dirty)" class="ui pointing red basic label">Please enter at least 4 characters</div>
     </div>
     <div class="field">
       <label>Last Name</label>
-      <input [ngStyle]="((lastName.errors?.required || lastName.errors?.minlength) && (lastName.touched || lastName.dirty)) && {'border': '0.5px solid red'}" ngModel #lastName="ngModel" name="lastName" type="text" placeholder="Enter Last Name" required minlength="4">
-      <div *ngIf="lastName.errors?.required && (lastName.touched || lastName.dirty)" class="ui pointing red basic label">Please enter a
-        value</div>
-      <div *ngIf="lastName.errors?.minlength && (lastName.touched || lastName.dirty)" class="ui pointing red basic label">Please enter at
-        least 4 characters</div>
+      <input [ngStyle]="((lastName.errors?.required || lastName.errors?.minlength) && (lastName.touched || lastName.dirty)) && {'border': '0.5px solid red'}"
+        ngModel #lastName="ngModel" name="lastName" type="text" placeholder="Enter Last Name" required minlength="4">
+      <div *ngIf="lastName.errors?.required && (lastName.touched || lastName.dirty)" class="ui pointing red basic label">Please enter a value
+      </div>
+      <div *ngIf="lastName.errors?.minlength && (lastName.touched || lastName.dirty)" class="ui pointing red basic label">Please enter at least 4 characters</div>
     </div>
     <div class="field">
       <label>Email</label>
-      <input [ngStyle]="((email.errors?.required || email.errors?.email) && (email.touched || email.dirty)) && {'border': '0.5px solid red'}" ngModel #email="ngModel" name="email" type="email" placeholder="Enter Email" required email>
+      <input [ngStyle]="((email.errors?.required || email.errors?.email) && (email.touched || email.dirty)) && {'border': '0.5px solid red'}"
+        ngModel #email="ngModel" name="email" type="email" placeholder="Enter Email" required email>
       <div *ngIf="email.errors?.required && (email.touched || email.dirty)" class="ui pointing red basic label">Please enter a value</div>
       <div *ngIf="email.errors?.email && (email.touched || email.dirty)" class="ui pointing red basic label">Please enter a valid email</div>
     </div>
     <div class="field">
       <label>Password</label>
-      <input [ngStyle]="((pass.errors?.required || pass.errors?.passInvalid) && (pass.touched || pass.dirty)) && {'border': '0.5px solid red'}" ngModel passwd #pass="ngModel" name="password" type="password" placeholder="Enter Password" required>
+      <input [ngStyle]="((pass.errors?.required || pass.errors?.passInvalid) && (pass.touched || pass.dirty)) && {'border': '0.5px solid red'}"
+        ngModel passwd #pass="ngModel" name="password" type="password" placeholder="Enter Password" required>
       <div *ngIf="pass.errors?.required && (pass.touched || pass.dirty)" class="ui pointing red basic label">Please enter a value</div>
-      <div *ngIf="!pass.errors?.required && pass.errors?.passInvalid && (pass.touched || pass.dirty)" class="ui pointing red basic label">Password
-        invalid! Password needs to be at least 6 charsacters long and contain uppercase, lowercase letters and numbers!</div>
+      <div *ngIf="!pass.errors?.required && pass.errors?.passInvalid && (pass.touched || pass.dirty)" class="ui pointing red basic label">Password invalid! Password needs to be at least 6 charsacters long and contain uppercase, lowercase letters and numbers!</div>
     </div>
     <div class="field">
       <label>Repeat Password</label>
-      <input [ngStyle]="((!repass.errors?.required && (repass.touched || repass.dirty) && repass.value!==pass.value) || (repass.errors?.required && (repass.touched || repass.dirty))) && {'border': '0.5px solid red'}" ngModel #repass="ngModel" name="repassword" type="password" required>
+      <input [ngStyle]="((!repass.errors?.required && (repass.touched || repass.dirty) && repass.value!==pass.value) || (repass.errors?.required && (repass.touched || repass.dirty))) && {'border': '0.5px solid red'}"
+        ngModel #repass="ngModel" name="repassword" type="password" required>
       <div *ngIf="repass.errors?.required && repass.touched" class="ui pointing red basic label">Please enter a value</div>
-      <div *ngIf="repass.touched && !repass.errors?.required && repass.value!==pass.value" class="ui pointing red basic label">Password
-        not matching</div>
+      <div *ngIf="repass.touched && !repass.errors?.required && repass.value!==pass.value" class="ui pointing red basic label">Password not matching</div>
     </div>
     <div style="text-align: center" class="field">
       <a [routerLink]="['/sign-in']">Already have an account? Login!</a>

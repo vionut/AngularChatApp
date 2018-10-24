@@ -3,7 +3,8 @@
     <app-header (userUpdated)="onUserUpdated($event)" [channel]="currentChannel" [chatUser]="chatUser"></app-header>
   </div>
   <div #messagesDiv class="windowBody">
-    <app-message *ngFor="let m of messages" [message]="m"></app-message>
+    <app-message (messageDeleted)="onMessageDeleted($event, i)" (messageEdited)="onMessageEdited($event, i)" *ngFor="let m of messages; let i=index"
+      [currentChannel]="currentChannel" [chatUser]="chatUser" [message]="m"></app-message>
   </div>
   <div class="windowFooter">
     <app-footer (messageSent)="onMessageSent($event)" [channel]="currentChannel" [chatUser]="chatUser"></app-footer>

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
+import { DataService } from '../data.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -11,18 +14,9 @@ import { JwtHelperService } from '@auth0/angular-jwt';
     <a [routerLink]="['/chat']" class="item">
       Chat
     </a>
-    <div class="ui right item">
-      <div class="ui compact menu">
-        <div class="ui simple dropdown item">
-          Profile
-          <i class="dropdown icon"></i>
-          <div class="menu">
-            <div class="item">Admin Panel</div>
-            <div class="item">Profile</div>
-            <div class="item">Logout</div>
-          </div>
-        </div>
-      </div>
+    <div class="right menu">
+      <a *ngIf="isAdmin" [routerLink]="['/admin-panel']" class="item">Admin Panel</a>
+      <a class="item" (click)="onLogout()">Logout</a>
     </div>
   </div>`,
   styles: [
@@ -41,11 +35,35 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class NavbarComponent implements OnInit {
   token;
   isExpired;
-  constructor() {}
+  isAdmin;
+  tokenChangedSub: Subscription;
+  constructor(public router: Router, public dataService: DataService) {
+    this.tokenChangedSub = dataService.tokenChanged.subscribe(data => this.init());
+  }
 
   ngOnInit() {
+    this.init();
+  }
+
+  ngOnDestroy() {
+    this.tokenChangedSub.unsubscribe();
+  }
+
+  init() {
     this.token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
     const jwtHelper = new JwtHelperService();
     this.isExpired = this.token ? jwtHelper.isTokenExpired(this.token) : true;
+    this.isAdmin = this.token
+      ? jwtHelper.decodeToken(this.token).user.role === 'admin'
+        ? true
+        : false
+      : false;
+    console.log(jwtHelper.decodeToken(this.token));
+  }
+
+  onLogout() {
+    this.token = null;
+    localStorage.removeItem('token');
+    this.router.navigate(['/sign-in']);
   }
 }

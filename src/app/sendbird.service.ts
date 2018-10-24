@@ -18,6 +18,16 @@ export class SendBirdService {
     return this._messageReceivedThroughHandler.asObservable();
   }
 
+  private _messageUpdatedThroughtHandler: Subject<any> = new Subject<any>();
+  get messageUpdatedThroughtHandler() {
+    return this._messageUpdatedThroughtHandler.asObservable();
+  }
+
+  private _messageDeletedThroughHandler: Subject<any> = new Subject<any>();
+  get messageDeletedThroughHandler() {
+    return this._messageDeletedThroughHandler.asObservable();
+  }
+
   constructor() {
     this.token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
     this.user_id = this.token ? this.tokenHelper.decodeToken(this.token).user._id : null;
@@ -31,7 +41,15 @@ export class SendBirdService {
       console.log(channel, message);
       this._messageReceivedThroughHandler.next({ channel, message });
     };
-    this.sbClient.addChannelHandler('message received', channelHandler);
+    channelHandler.onMessageUpdated = (channel, message) => {
+      console.log(channel, message);
+      this._messageUpdatedThroughtHandler.next({ channel, message });
+    };
+    channelHandler.onMessageDeleted = (channel, messageId) => {
+      console.log(channel, messageId);
+      this._messageDeletedThroughHandler.next({ channel, messageId });
+    };
+    this.sbClient.addChannelHandler('messages', channelHandler);
   }
 
   connectToSb() {
@@ -121,7 +139,7 @@ export class SendBirdService {
     });
   }
 
-  sendMessageToOpenChannel(channel, message) {
+  sendMessageToChannel(channel, message) {
     if (!message.attachments) {
       return new Observable(observer => {
         channel.sendUserMessage(message, (message, error) => {
@@ -176,6 +194,30 @@ export class SendBirdService {
           observer.error({ ...error, message: "Couldn't update user profile" });
         }
         observer.next({ response, message: 'Updated user profile' });
+        observer.complete();
+      });
+    });
+  }
+
+  updateMessage(channel, messageId, newMessage) {
+    return new Observable(observer => {
+      channel.updateUserMessage(messageId, newMessage, null, null, (message, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't edit message" });
+        }
+        observer.next(message);
+        observer.complete();
+      });
+    });
+  }
+
+  deleteMessage(channel, message) {
+    return new Observable(observer => {
+      channel.deleteMessage(message, (response, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't delete message" });
+        }
+        observer.next(response);
         observer.complete();
       });
     });

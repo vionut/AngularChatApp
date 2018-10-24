@@ -1,3 +1,65 @@
-<p>
-  admin-table works!
-</p>
+<div class="admin-table-container">
+  <table class="ui selectable celled table">
+    <thead>
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let u of users; let i=index" (click)="openUserModal(i)">
+        <td>{{u.firstName}}</td>
+        <td>{{u.lastName}}</td>
+        <td>{{u.email}}</td>
+        <td>{{u.role}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template let-context let-modal="modal" #modalTemplate>
+  <div class="header">User Details</div>
+  <div class="content">
+    <form #form="ngForm" class="ui form">
+      <div class="field">
+        <label>First Name</label>
+        <input [ngStyle]="((firstName.errors?.required || firstName.errors?.minlength) && (firstName.touched || firstName.dirty)) && {'border': '0.5px solid red'}"
+          [(ngModel)]="context.user.firstName" #firstName="ngModel" name="firstName" type="text" placeholder="Enter First Name"
+          required minlength="4">
+        <div *ngIf="firstName.errors?.required && (firstName.touched || firstName.dirty)" class="ui pointing red basic label">Please enter a value
+        </div>
+        <div *ngIf="firstName.errors?.minlength && (firstName.touched || firstName.dirty)" class="ui pointing red basic label">Please enter at least 4 characters</div>
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input [ngStyle]="((lastName.errors?.required || lastName.errors?.minlength) && (lastName.touched || lastName.dirty)) && {'border': '0.5px solid red'}"
+          [(ngModel)]="context.user.lastName" #lastName="ngModel" name="lastName" type="text" placeholder="Enter Last Name"
+          required minlength="4">
+        <div *ngIf="lastName.errors?.required && (lastName.touched || lastName.dirty)" class="ui pointing red basic label">Please enter a value
+        </div>
+        <div *ngIf="lastName.errors?.minlength && (lastName.touched || lastName.dirty)" class="ui pointing red basic label">Please enter at least 4 characters</div>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input [ngStyle]="((email.errors?.required || email.errors?.email) && (email.touched || email.dirty)) && {'border': '0.5px solid red'}"
+          [(ngModel)]="context.user.email" #email="ngModel" name="email" type="email" placeholder="Enter Email" required email>
+        <div *ngIf="email.errors?.required && (email.touched || email.dirty)" class="ui pointing red basic label">Please enter a value</div>
+        <div *ngIf="email.errors?.email && (email.touched || email.dirty)" class="ui pointing red basic label">Please enter a valid email</div>
+      </div>
+      <div class="field">
+        <label>Role</label>
+        <select [(ngModel)]="context.user.role" [ngModelOptions]="{standalone: true}" class="ui dropdown">
+          <option value="user">User</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="loading" class="ui small active centered inline workaround loader"></div>
+  <div class="actions">
+    <button class="ui red button" (click)="onDeleteUser(context.user.id, modal)">Delete User</button>
+    <button class="ui green button" (click)="onEditUser(context.user.id, context.user.role, form, modal)" autofocus>Edit User</button>
+  </div>
+</ng-template>

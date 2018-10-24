@@ -22,15 +22,16 @@ export class SignInComponent implements OnInit {
     this.dataService.login({ email, password }).subscribe(
       (data: any) => {
         localStorage.setItem('token', data.response.token);
+        this.dataService._tokenChanged.next(true);
         this.router.navigate(['/chat']);
       },
       error => {
         if (error.status == 0) {
-          this.errorMessage = "There might be a problem with the server, try again later!"
+          this.errorMessage = 'There might be a problem with the server, try again later!';
           return;
-        };
-        if(error.error && error.error.message == 'Could not find user') {
-          this.errorMessage = "This is not a valid user!";
+        }
+        if (error.error && error.error.message == 'Could not find user') {
+          this.errorMessage = 'This is not a valid user!';
         }
       }
     );

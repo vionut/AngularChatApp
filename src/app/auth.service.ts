@@ -12,4 +12,9 @@ export class AuthService {
     const token = localStorage.getItem('token');
     return !this.jwtHelper.isTokenExpired(token);
   }
+
+  public isAdmin(): boolean {
+    const role = this.jwtHelper.decodeToken(localStorage.getItem('token')).user.role;
+    return role === 'admin';
+  }
 }

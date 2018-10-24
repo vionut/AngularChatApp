@@ -24,19 +24,30 @@ export class ChatComponent implements OnInit {
 
   constructor(public sendbirdService: SendBirdService) {
     const receiveMessageSub = this.sendbirdService.messageReceivedThroughHandler.subscribe(data => {
-      if (data.channel.channelType === 'open') {
-        if (this.currentChannel.url === data.channel.url) {
-          this.addSentMessageToArray(data.message);
-        }
-        this.sendbirdService
-          .sendMessageToOpenChannel(data.channel, data.message)
-          .subscribe((response: any) => {
-            console.log('Succesfully sent message: ', response.message);
-            console.log('To channel: ', response.channel);
-          });
+      if (this.currentChannel.url === data.channel.url) {
+        this.addSentMessageToArray(data.message);
+        return;
       }
+      this.sendbirdService
+        .sendMessageToChannel(data.channel, data.message)
+        .subscribe((response: any) => {
+          console.log('Succesfully sent message: ', response.message);
+          console.log('To channel: ', response.channel);
+        });
     });
+    const updateMessageSub = sendbirdService.messageUpdatedThroughtHandler.subscribe(data => {
+      const messageToUpdateIndex = this.channelMessages.findIndex(
+        m => m.messageId === data.message.messageId
+      );
+      this.channelMessages.splice(messageToUpdateIndex, 1, data.message);
+    });
+    const deleteMessageSub = sendbirdService.messageDeletedThroughHandler.subscribe(data => {
+      this.loadChannelMessages(this.currentChannel);
+    });
+
     this.subs.push(receiveMessageSub);
+    this.subs.push(updateMessageSub);
+    this.subs.push(deleteMessageSub);
   }
 
   ngOnInit() {
@@ -56,6 +67,14 @@ export class ChatComponent implements OnInit {
     this.channelUsers.splice(this.channelUsers.indexOf[this.chatUser], 1, data.response);
     this.allChatUsers.splice(this.allChatUsers.indexOf[this.chatUser], 1, data.response);
     this.chatUser = data.response;
+  }
+
+  userMessageUpdated(data) {
+    this.channelMessages.splice(data.index, 1, data.message);
+  }
+
+  userMessageDeleted($event) {
+    this.loadChannelMessages(this.currentChannel);
   }
 
   init() {
@@ -129,14 +148,14 @@ export class ChatComponent implements OnInit {
 
   onUserClicked(user) {
     this.loading = true;
-    console.log("Trying to create conversation with user: ", user);
+    console.log('Trying to create conversation with user: ', user);
   }
 
   onConversationCreated(data) {
     this.loading = false;
     this.currentChannel = data.conversation;
-    console.log("Successfully created channel: ", data.conversation);
-    if(!this.conversations.find((e) => e.url == data.conversation.url)) {
+    console.log('Successfully created channel: ', data.conversation);
+    if (!this.conversations.find(e => e.url == data.conversation.url)) {
       this.conversations.push(data.conversation);
     }
     this.loadChannelMessages(data.conversation);

@@ -6,11 +6,12 @@
       [channels]="openChannels" [currentChannel]="currentChannel"></app-channels>
   </div>
   <div class="mainContainer">
-    <app-chat-window (userUpdated)="userProfileUpdated($event)" (userSentMessage)="addSentMessageToArray($event)" #chatWindow [chatUser]="chatUser"
-      [currentChannel]="currentChannel" [messages]="channelMessages"></app-chat-window>
+    <app-chat-window (messageDeleted)="userMessageDeleted($event)" (messageUpdated)="userMessageUpdated($event)" (userUpdated)="userProfileUpdated($event)"
+      (userSentMessage)="addSentMessageToArray($event)" #chatWindow [chatUser]="chatUser" [currentChannel]="currentChannel"
+      [messages]="channelMessages"></app-chat-window>
   </div>
   <div class="rightContainer">
-    <app-directory (userClicked)="onUserClicked($event)" (conversationCreated)="onConversationCreated($event)"
-      [channelUsers]="channelUsers" [chatUser]="chatUser" [chatUsers]="allChatUsers"></app-directory>
+    <app-directory (userClicked)="onUserClicked($event)" (conversationCreated)="onConversationCreated($event)" [channelUsers]="channelUsers"
+      [chatUser]="chatUser" [chatUsers]="allChatUsers"></app-directory>
   </div>
 </div>
