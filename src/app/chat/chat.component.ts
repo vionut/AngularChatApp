@@ -52,6 +52,12 @@ export class ChatComponent implements OnInit {
     this.chatWindow.scrollToBottom();
   }
 
+  userProfileUpdated(data) {
+    this.channelUsers.splice(this.channelUsers.indexOf[this.chatUser], 1, data.response);
+    this.allChatUsers.splice(this.allChatUsers.indexOf[this.chatUser], 1, data.response);
+    this.chatUser = data.response;
+  }
+
   init() {
     this.loading = true;
     const chatConnectSub = this.sendbirdService.connectToSb().subscribe(
@@ -119,6 +125,21 @@ export class ChatComponent implements OnInit {
       }
     );
     this.subs.push(getGroupChannelsSub);
+  }
+
+  onUserClicked(user) {
+    this.loading = true;
+    console.log("Trying to create conversation with user: ", user);
+  }
+
+  onConversationCreated(data) {
+    this.loading = false;
+    this.currentChannel = data.conversation;
+    console.log("Successfully created channel: ", data.conversation);
+    if(!this.conversations.find((e) => e.url == data.conversation.url)) {
+      this.conversations.push(data.conversation);
+    }
+    this.loadChannelMessages(data.conversation);
   }
 
   onChannelClicked(channel) {

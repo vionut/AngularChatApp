@@ -1,3 +1,54 @@
-<p>
-  header works!
-</p>
+<div class="headerContainer">
+  <div class="channelInfo">
+    <h2 *ngIf="channel.channelType==='open'" class="ui header">
+      <img [src]="channel.coverUrl" class="ui circular image">
+      {{channel.name}}
+    </h2>
+    <div *ngIf="channel.channelType==='group'">
+      <div class="ui horizontal list">
+        <div *ngFor="let m of channel.members" class="item">
+          <img class="ui mini circular image" [src]="m.profileUrl">
+          <div class="content">
+            <div class="ui sub header">{{m.nickname}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="headerControls">
+    <div class="ui icon buttons">
+      <button (click)="openProfileModal()" class="ui button">
+        <i class="user circle icon"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<ng-template let-context let-modal="modal" #modalTemplate>
+  <div class="header">Profile</div>
+  <div class="content">
+    <form #f="ngForm" class="ui form">
+      <div class="field">
+        <label>Nickname</label>
+        <input [ngStyle]="(nicknameInput.touched && nicknameInput.errors) && {'border': '0.5px solid red'}" type="text"
+          name="nickname" required minlength="3" #nicknameInput="ngModel" [(ngModel)]="context.data.nickname">
+        <div *ngIf="nicknameInput.errors?.required && (nicknameInput.touched || nicknameInput.dirty)" class="ui pointing red basic label">Please
+          enter a value</div>
+        <div *ngIf="!nicknameInput.errors?.required && nicknameInput.errors?.minlength && (nicknameInput.touched || nicknameInput.dirty)"
+          class="ui pointing red basic label">Must
+          be at least 3 characters long</div>
+      </div>
+      <div class="field">
+        <label>Avatar</label>
+        <input type="file" hidden (change)="uploadAvatar()" #avatarInput>
+        <img #avatarImage style="width: 100px; height:100px" (click)="avatarInput.click()" [src]="context.data.imgSource">
+      </div>
+      <div *ngIf="loading" class="ui small active centered inline workaround loader"></div>
+    </form>
+  </div>
+  <div class="actions">
+    <button class="ui red button" (click)="modal.deny('denied')">Cancel</button>
+    <button class="ui green button" (click)="onSaveProfile(nicknameInput, modal)" [disabled]="f.invalid" autofocus>Save</button>
+  </div>
+</ng-template>

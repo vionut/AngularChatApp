@@ -1,5 +1,7 @@
 <div *ngIf="currentChannel" class="main-container">
-  <div class="windowHeader"></div>
+  <div class="windowHeader">
+    <app-header (userUpdated)="onUserUpdated($event)" [channel]="currentChannel" [chatUser]="chatUser"></app-header>
+  </div>
   <div #messagesDiv class="windowBody">
     <app-message *ngFor="let m of messages" [message]="m"></app-message>
   </div>

@@ -147,4 +147,37 @@ export class SendBirdService {
       });
     });
   }
+
+  createConversation(otherId, id) {
+    return new Observable(observer => {
+      this.sbClient.GroupChannel.createChannelWithUserIds(
+        [id, otherId],
+        true,
+        (conversation, error) => {
+          if (error) {
+            observer.error({ ...error, message: "Couldn't create conversation" });
+          }
+          this.sbClient.GroupChannel.getChannel(conversation.url, (groupChannel, error) => {
+            if (error || !groupChannel) {
+              observer.next({ conversation, isNew: true });
+            }
+            observer.next({ conversation, isNew: false });
+            observer.complete();
+          });
+        }
+      );
+    });
+  }
+
+  updateUserProfile(nickname, avatar) {
+    return new Observable(observer => {
+      this.sbClient.updateCurrentUserInfo(nickname, avatar, (response, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't update user profile" });
+        }
+        observer.next({ response, message: 'Updated user profile' });
+        observer.complete();
+      });
+    });
+  }
 }

@@ -22,8 +22,10 @@
 
 .rightContainer {
     width:20%;
-    border: 1px solid;
+    border: 0.5px solid #eee;
     flex-grow: 1;
+    margin:10px;
+    border-radius: 10px;
 }
 
 

@@ -13,11 +13,12 @@ export class ChannelsComponent implements OnInit {
   channels;
   @Input()
   chatUser;
+  @Input()
+  currentChannel;
   @Output()
   channelEntered: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   channelClicked: EventEmitter<any> = new EventEmitter<any>();
-  currentChannel;
   subs: Subscription[] = [];
 
   constructor(public sendbirdService: SendBirdService) {}
@@ -33,8 +34,7 @@ export class ChannelsComponent implements OnInit {
     const channelUrl = this.channels[index].url;
     const enterChannelSub = this.sendbirdService.enterOpenChannel(channelUrl).subscribe(
       data => {
-        this.currentChannel = data;
-        this.channelEntered.emit(this.currentChannel);
+        this.channelEntered.emit(data);
       },
       error => {
         this.channelEntered.emit({ channel: this.channels[index], error: error.message });

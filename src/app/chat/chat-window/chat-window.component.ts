@@ -24,6 +24,8 @@ export class ChatWindowComponent implements OnInit {
   @Output()
   userSentMessage: EventEmitter<any> = new EventEmitter<any>();
 
+  @Output() userUpdated: EventEmitter<any> = new EventEmitter<any>();
+
   @ViewChild('messagesDiv')
   conversationDiv: ElementRef;
 
@@ -39,5 +41,9 @@ export class ChatWindowComponent implements OnInit {
 
   onMessageSent(message) {
     this.userSentMessage.emit(message);
+  }
+
+  onUserUpdated(data) {
+    this.userUpdated.emit(data);
   }
 }

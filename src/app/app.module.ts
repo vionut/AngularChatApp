@@ -8,7 +8,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChannelsComponent } from './chat/channels/channels.component';
-import { ConversationsComponent } from './chat/conversations/conversations.component';
 import { DirectoryComponent } from './chat/directory/directory.component';
 import { HeaderComponent } from './chat/chat-window/header/header.component';
 import { ChatWindowComponent } from './chat/chat-window/chat-window.component';
@@ -30,7 +29,6 @@ import { CheckPasswordDirective } from './sign-up/check-password.directive';
     AppComponent,
     ChatComponent,
     ChannelsComponent,
-    ConversationsComponent,
     DirectoryComponent,
     HeaderComponent,
     ChatWindowComponent,

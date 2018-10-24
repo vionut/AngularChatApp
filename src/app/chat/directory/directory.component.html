@@ -4,7 +4,7 @@
   </div>
   <div class="ui big very relaxed middle aligned selection list">
     <ng-container *ngFor="let u of channelUsers; let i=index">
-      <div *ngIf="u.nickname !== chatUser.nickname" class="item">
+      <div class="item">
         <img class="ui avatar image" [src]="u.profileUrl">
         <div class="content">
           <div class="header">{{u.nickname}}
@@ -22,8 +22,8 @@
     CHAT USERS
   </div>
   <div class="ui big very relaxed middle aligned selection list">
-    <ng-container *ngFor="let usr of chatUsers; let i=index">
-      <div *ngIf="usr.nickname !== chatUser.nickname" class="item">
+    <ng-container *ngFor="let usr of chatUsers; let j=index">
+      <div *ngIf="usr.nickname !== chatUser.nickname" (click)="openConversation(j)" class="item">
         <img class="ui avatar image" [src]="usr.profileUrl">
         <div class="content">
           <div class="header">{{usr.nickname}}

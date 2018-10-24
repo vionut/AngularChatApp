@@ -3,7 +3,8 @@
     CHANNELS
   </div>
   <div class="ui big very relaxed middle aligned selection list">
-    <div *ngFor="let c of channels; let i=index" class="item" (click)="enterOpenChannel(i)">
+    <div *ngFor="let c of channels; let i=index" class="item" [ngStyle]="(currentChannel && c.url===currentChannel.url) && {'border': '0.5px solid blue'}"
+      (click)="enterOpenChannel(i)">
       <img class="ui avatar image" [src]="c.coverUrl">
       <div class="content">
         <div class="header">{{c.name}}</div>
@@ -11,5 +12,3 @@
     </div>
   </div>
 </div>
-
-

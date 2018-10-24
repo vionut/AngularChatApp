@@ -18,22 +18,22 @@ export class SignUpComponent implements OnInit {
   onSubmit(form: NgForm) {
     console.log(form.controls);
     const user = {
-      firstName: form.controls['firstName'],
-      lastName: form.controls['lastName'],
-      email: form.controls['email'],
-      password: form.controls['password']
+      firstName: form.controls['firstName'].value,
+      lastName: form.controls['lastName'].value,
+      email: form.controls['email'].value,
+      password: form.controls['password'].value
     };
     this.dataService.register(user).subscribe(
       (data: any) => {
         localStorage.setItem('token', data.response.token);
         this.router.navigate(['/chat']);
       },
-      error => {
-        if (error.status == 0) {
+      errorResponse => {
+        if (errorResponse.status == 0) {
           this.errorMessage = 'There might be a problem with the server, try again later!';
           return;
         }
-        if (error.error && error.error.message == 'Could not find user') {
+        if (errorResponse.error && errorResponse.error.message == 'Could not find user') {
           this.errorMessage = 'This is not a valid user!';
         }
       }
