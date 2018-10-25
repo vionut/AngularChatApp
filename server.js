@@ -35,7 +35,7 @@ app.use(cookieParser());
 app.use("/users", user);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
+  res.sendFile(path.join(__dirname, 'dist/chat-app/index.html'));
 })
 
 let port = process.env.PORT || 8080;
