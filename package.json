@@ -39,7 +39,7 @@
     "ng2-semantic-ui": "^0.9.7",
     "router": "^1.3.3",
     "rxjs": "^6.0.0",
-    "sendbird": "^3.0.47",
+    "sendbird": "^3.0.48",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
