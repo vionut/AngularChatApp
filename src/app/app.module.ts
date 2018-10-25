@@ -23,6 +23,7 @@ import { AuthService } from './auth.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SendBirdService } from './sendbird.service';
 import { CheckPasswordDirective } from './sign-up/check-password.directive';
+import { EmojiPickerModule } from "ng-emoji-picker";
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { CheckPasswordDirective } from './sign-up/check-password.directive';
     NavbarComponent,
     CheckPasswordDirective
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpModule, HttpClientModule, SuiModule],
+  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpModule, HttpClientModule, SuiModule, EmojiPickerModule],
   providers: [DataService, AuthGuardService, AuthService, SendBirdService, CheckPasswordDirective],
   bootstrap: [AppComponent]
 })

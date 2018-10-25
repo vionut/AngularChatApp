@@ -140,17 +140,27 @@ export class SendBirdService {
   }
 
   sendMessageToChannel(channel, message) {
-    if (!message.attachments) {
-      return new Observable(observer => {
-        channel.sendUserMessage(message, (message, error) => {
-          if (error) {
-            observer.error({ ...error, message: "Couldn't send message" });
-          }
-          observer.next(message);
-          observer.complete();
-        });
+    return new Observable(observer => {
+      channel.sendUserMessage(message, (message, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't send message" });
+        }
+        observer.next(message);
+        observer.complete();
       });
-    }
+    });
+  }
+
+  sendFileMessageToChannel(channel, file) {
+    return new Observable(observer => {
+      channel.sendFileMessage(file, (message, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't send message" });
+        }
+        observer.next(message);
+        observer.complete();
+      });
+    });
   }
 
   getChannelUsers(channel) {

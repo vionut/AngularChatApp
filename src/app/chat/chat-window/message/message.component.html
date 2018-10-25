@@ -2,7 +2,7 @@
   <div class="messageUser" suiPopup [popupHeader]="message._sender.nickname" [popupText]="getDateFromMoment(message.createdAt)">
     <img class="ui avatar image" [src]="message._sender.profileUrl">
   </div>
-  <div class="messageText" (mouseleave)="this.isEditVisible=false;" (mouseenter)="this.isEditVisible = this.message.sender.userId === this.chatUser.userId;">
+  <div *ngIf="message.messageType == 'user'" class="messageText" (mouseleave)="this.isEditVisible=false;" (mouseenter)="this.isEditVisible = this.message.sender.userId === this.chatUser.userId;">
     <span>{{message.message}}</span>
     <a *ngIf="isEditVisible" (click)="editingMessage=!editingMessage" style="float: right" class="ui label">
       <i class="edit icon"></i>
@@ -11,6 +11,10 @@
       <i class="trash alternate icon"></i>
     </a>
   </div>
+  <div style="padding:20px" *ngIf="message.messageType == 'file'">
+    <img style="width:75px; height:75px" [src]="message.url">
+  </div>
+
   <div *ngIf="editingMessage">
     <div class="ui form">
       <div class="field">
