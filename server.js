@@ -37,6 +37,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 })
 
-app.listen(3005, () => {
-  console.log(new Date() + " Server is listening on port " + 3005);
-});
+let port = process.env.PORT || 8080;
+
+app.listen(port);
