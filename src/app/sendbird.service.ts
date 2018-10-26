@@ -176,10 +176,10 @@ export class SendBirdService {
     });
   }
 
-  createConversation(otherId, id) {
+  createConversation(ids: any[]) {
     return new Observable(observer => {
       this.sbClient.GroupChannel.createChannelWithUserIds(
-        [id, otherId],
+        ids,
         true,
         (conversation, error) => {
           if (error) {

@@ -12,3 +12,50 @@
     </div>
   </div>
 </div>
+
+<div class="groupChatsList">
+  <div class="ui small center aligned header">
+    GROUPS <i class="plus circle icon" style="cursor:pointer" (click)="openCreateGroupModal()"></i>
+  </div>
+  <div class="ui big very relaxed middle aligned selection list">
+    <div *ngFor="let g of groups; let i=index" class="item" [ngStyle]="(currentChannel && g.url===currentChannel.url) && {'border': '0.5px solid blue'}"
+      (click)="groupClicked.emit(g)">
+      <img class="ui avatar image" [src]="g.coverUrl">
+      <div class="content">
+        <div class="header">
+          <span style="font-size:10px" *ngFor="let m of g.members; let z=index">{{m.nickname}}     </span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template let-context let-modal="modal" #modalTemplate>
+  <div class="header">Create Group</div>
+  <div class="content groupModalContent">
+    <div class="groupCreation" droppable (onDrop)="onItemDrop($event, context.data)">
+      <div *ngIf="newGroupParticipants" class="ui very relaxed middle aligned list">
+        <div class="item" (mouseenter)="showDiscardUser = true" (mouseleave)="showDiscardUser = false" *ngFor="let p of newGroupParticipants; let j=index">
+          <img class="ui avatar image" [src]="p.profileUrl">
+          <div class="content">
+            <div class="header">{{p.nickname}} <i *ngIf="showDiscardUser" class="x icon" style="cursor: pointer"
+                (click)="removeNewParticipant(j, context.data)"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="usersList">
+      <div *ngIf="context.data" class="ui very relaxed middle aligned list">
+        <div class="item" draggable *ngFor="let u of context.data; let i=index" [dragData]="u">
+          <img class="ui avatar image" [src]="u.profileUrl">
+          <div class="content">
+            <div class="header">{{u.nickname}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="ui red button" (click)="modal.deny('denied')">Cancel</button>
+    <button class="ui green button" (click)="createGroupChat(modal)" [disabled]="newGroupParticipants.length < 1">CreateGroup</button>
+  </div>
+</ng-template>

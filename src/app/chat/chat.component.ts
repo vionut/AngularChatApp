@@ -14,6 +14,7 @@ export class ChatComponent implements OnInit {
   allChatUsers;
   openChannels;
   conversations;
+  groupChats: any[] = [];
   currentChannel;
   channelMessages: any[] = [];
   channelUsers: any[] = [];
@@ -133,9 +134,15 @@ export class ChatComponent implements OnInit {
   getGroupChannls() {
     this.loading = true;
     const getGroupChannelsSub = this.sendbirdService.getGroupChannels().subscribe(
-      data => {
+      (data: any) => {
         this.conversations = data;
+        data.forEach(d => {
+          if(d.members.length > 2) {
+            this.groupChats.push(d);
+          }
+        })
         console.log('Succesfully retrieved list of conversations: ', this.conversations);
+        console.log(this.groupChats);
         this.loading = false;
       },
       error => {
@@ -164,6 +171,38 @@ export class ChatComponent implements OnInit {
   onChannelClicked(channel) {
     this.loading = true;
     console.log('Trying to enter channel: ', channel);
+  }
+
+  onCreateGroupClicked(participants) {
+    this.loading = true;
+    console.log("Trying to create conversation with: ", participants);
+  }
+
+  onGroupCreated(data) {
+    if(data.error) {
+      this.loading = false;
+      console.log("Couldn't create group: ", data.channel);
+      console.log('Error: ', data.error);
+      return;
+    }
+    this.loading = false;
+    this.currentChannel = data.conversation;
+    console.log('Successfully created group: ', data.conversation);
+    if(!this.groupChats) {
+      this.groupChats.push(data.conversation);
+    } else {
+      if (!this.groupChats.find(e => e.url == data.conversation.url)) {
+        this.groupChats.push(data.conversation);
+      }
+    }
+    this.loadChannelMessages(data.conversation);
+  }
+
+  onGroupClicked(group) {
+    this.currentChannel = group;
+    console.log('Successfully entered group: ', group);
+    this.loadChannelMessages(group);
+    this.loadChannelUsers(group);
   }
 
   onChannelEntered(channel) {

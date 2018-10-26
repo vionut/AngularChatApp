@@ -2,7 +2,7 @@
   <div *ngIf="loading" class="ui huge active loader"></div>
 
   <div class="leftContainer">
-    <app-channels (channelEntered)="onChannelEntered($event)" (channelClicked)="onChannelClicked($event)" [chatUser]="chatUser"
+    <app-channels [groups]="groupChats" [chatUsers]="allChatUsers" (groupClicked)="onGroupClicked($event)" (createGroupClicked)="onCreateGroupClicked($event)" (groupCreated)="onGroupCreated($event)" (channelEntered)="onChannelEntered($event)" (channelClicked)="onChannelClicked($event)" [chatUser]="chatUser"
       [channels]="openChannels" [currentChannel]="currentChannel"></app-channels>
   </div>
   <div class="mainContainer">

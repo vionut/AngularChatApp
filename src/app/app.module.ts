@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SuiModule } from "ng2-semantic-ui";
+import { SuiModule } from 'ng2-semantic-ui';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -23,7 +23,8 @@ import { AuthService } from './auth.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SendBirdService } from './sendbird.service';
 import { CheckPasswordDirective } from './sign-up/check-password.directive';
-import { EmojiPickerModule } from "ng-emoji-picker";
+import { EmojiPickerModule } from 'ng-emoji-picker';
+import { NgDragDropModule } from 'ng-drag-drop';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,16 @@ import { EmojiPickerModule } from "ng-emoji-picker";
     NavbarComponent,
     CheckPasswordDirective
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpModule, HttpClientModule, SuiModule, EmojiPickerModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpModule,
+    HttpClientModule,
+    SuiModule,
+    EmojiPickerModule,
+    NgDragDropModule.forRoot()
+  ],
   providers: [DataService, AuthGuardService, AuthService, SendBirdService, CheckPasswordDirective],
   bootstrap: [AppComponent]
 })
