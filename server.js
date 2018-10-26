@@ -34,11 +34,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/users", user);
 
-// app.use(express.static(__dirname + '/dist/chat-app'));
+app.use(express.static(__dirname + '/dist/chat-app'));
 
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, 'dist/chat-app/index.html'));
-// })
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/chat-app/index.html'));
+})
 
 let port = process.env.PORT || 8080;
 
