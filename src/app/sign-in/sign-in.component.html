@@ -18,6 +18,12 @@
     <div style="text-align: center" class="field">
       <a [routerLink]="['/sign-up']">Don't have an account? Register!</a>
     </div>
+    <div style="text-align: center" class="field">
+      OR
+      <div>
+        <button class="ui blue button" (click)="socialSignIn('facebook')" type="button">Facebook Login</button>
+      </div>
+    </div>
     <button class="ui green button" [disabled]="form.invalid" type="submit">Submit</button>
   </form>
   <div *ngIf="errorMessage" style="text-align: center; margin-top:10px">

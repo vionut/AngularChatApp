@@ -4,6 +4,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SuiModule } from 'ng2-semantic-ui';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
+import {
+  SocialLoginModule,
+  AuthServiceConfig,
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from 'angular-6-social-login';
+import { EmojiPickerModule } from 'ng-emoji-picker';
+import { NgDragDropModule } from 'ng-drag-drop';
 
 import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
@@ -23,8 +31,20 @@ import { AuthService } from './auth.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SendBirdService } from './sendbird.service';
 import { CheckPasswordDirective } from './sign-up/check-password.directive';
-import { EmojiPickerModule } from 'ng-emoji-picker';
-import { NgDragDropModule } from 'ng-drag-drop';
+
+export function getAuthServiceConfigs() {
+  let config = new AuthServiceConfig([
+    {
+      id: FacebookLoginProvider.PROVIDER_ID,
+      provider: new FacebookLoginProvider('208723553257565')
+    },
+    {
+      id: GoogleLoginProvider.PROVIDER_ID,
+      provider: new GoogleLoginProvider('Your-Google-Client-Id')
+    }
+  ]);
+  return config;
+}
 
 @NgModule({
   declarations: [
@@ -50,9 +70,14 @@ import { NgDragDropModule } from 'ng-drag-drop';
     HttpClientModule,
     SuiModule,
     EmojiPickerModule,
-    NgDragDropModule.forRoot()
+    NgDragDropModule.forRoot(),
+    SocialLoginModule
   ],
-  providers: [DataService, AuthGuardService, AuthService, SendBirdService, CheckPasswordDirective],
+  providers: [DataService, AuthGuardService, AuthService, SendBirdService, CheckPasswordDirective,
+  {
+    provide: AuthServiceConfig,
+    useFactory: getAuthServiceConfigs
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
