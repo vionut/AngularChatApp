@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DataService } from '../data.service';
 import { Router } from '@angular/router';
+import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular-6-social-login';
 
 @Component({
   selector: 'app-sign-in',
@@ -10,9 +11,33 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent implements OnInit {
   errorMessage;
-  constructor(public dataService: DataService, public router: Router) {}
+  constructor(
+    public dataService: DataService,
+    public router: Router,
+    private socialAuthService: AuthService
+  ) {}
 
   ngOnInit() {}
+
+  socialSignIn(platform: string) {
+    let socialPlatformProvider;
+    if (platform == 'facebook') {
+      socialPlatformProvider = FacebookLoginProvider.PROVIDER_ID;
+    } else if (platform == 'google') {
+      socialPlatformProvider = GoogleLoginProvider.PROVIDER_ID;
+    }
+
+    this.socialAuthService.signIn(socialPlatformProvider).then(
+      user => {
+        console.log(user);
+        localStorage.setItem('socialToken', user.token);
+        localStorage.setItem('socialId', user.id);
+        this.dataService._tokenChanged.next(true);
+        console.log(localStorage);
+        this.router.navigate(['/chat']);
+      } 
+    );
+  }
 
   onSubmit(form: NgForm) {
     console.log(form.controls);
