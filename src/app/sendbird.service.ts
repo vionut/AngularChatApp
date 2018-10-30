@@ -209,7 +209,7 @@ export class SendBirdService {
 
   updateUserProfile(nickname, avatar) {
     return new Observable(observer => {
-      this.sbClient.updateCurrentUserInfo(nickname, avatar, (response, error) => {
+      this.sbClient.updateCurrentUserInfoWithProfileImage(nickname, avatar, (response, error) => {
         if (error) {
           observer.error({ ...error, message: "Couldn't update user profile" });
         }

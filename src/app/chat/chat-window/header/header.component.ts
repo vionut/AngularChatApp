@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ViewChild,
+  ElementRef,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import { ModalTemplate, SuiModalService, TemplateModalConfig, ModalSize } from 'ng2-semantic-ui';
 import { SendBirdService } from 'src/app/sendbird.service';
 import { Subscription } from 'rxjs';
@@ -28,7 +36,8 @@ export class HeaderComponent implements OnInit {
   avatarImage: ElementRef;
   subs: Subscription[] = [];
   loading = false;
-  @Output() userUpdated: EventEmitter<any> = new EventEmitter<any>();
+  @Output()
+  userUpdated: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(public modalService: SuiModalService, public sendbirdService: SendBirdService) {}
 
@@ -71,7 +80,8 @@ export class HeaderComponent implements OnInit {
   onSaveProfile(input, modal) {
     this.loading = true;
     const newNickname = input.value;
-    const newAvatar = this.avatarImage.nativeElement.src;
+    const newAvatar =
+      this.avatarImage.nativeElement.files && this.avatarImage.nativeElement.files[0];
     const updateProfileSub = this.sendbirdService
       .updateUserProfile(newNickname, newAvatar)
       .subscribe(
@@ -83,7 +93,7 @@ export class HeaderComponent implements OnInit {
           console.log(error);
         },
         () => {
-          modal.approve("update profile clicked!");
+          modal.approve('update profile clicked!');
         }
       );
     this.subs.push(updateProfileSub);
