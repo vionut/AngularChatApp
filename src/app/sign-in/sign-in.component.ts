@@ -28,7 +28,14 @@ export class SignInComponent implements OnInit {
     }
 
     this.socialAuthService.signIn(socialPlatformProvider).then(
-      user => console.log(user)
+      user => {
+        console.log(user);
+        localStorage.setItem('socialToken', user.token);
+        localStorage.setItem('socialId', user.id);
+        this.dataService._tokenChanged.next(true);
+        console.log(localStorage);
+        this.router.navigate(['/chat']);
+      } 
     );
   }
 
