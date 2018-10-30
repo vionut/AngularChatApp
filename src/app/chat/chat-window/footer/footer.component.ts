@@ -46,6 +46,27 @@ export class FooterComponent implements OnInit {
     this.inputDisabled = true;
     const messageToSend = this.message.text;
     const fileToSend = this.message.attachment ? this.message.attachment : null;
+    if (!messageToSend && fileToSend) {
+      const sendFileSub = this.sendbirdService
+        .sendFileMessageToChannel(this.channel, fileToSend)
+        .subscribe(
+          data => {
+            console.log('Successfully sent message: ', data);
+            this.messageSent.emit(data);
+            this.inputDisabled = false;
+            input.focus();
+            this.message.text = '';
+            this.message.attachment = null;
+            this.loading = false;
+          },
+          error => {
+            console.log(error.message);
+            this.inputDisabled = false;
+          }
+        );
+      this.subs.push(sendFileSub);
+      return;
+    }
     const sendMessageSub = this.sendbirdService
       .sendMessageToChannel(this.channel, messageToSend)
       .subscribe(

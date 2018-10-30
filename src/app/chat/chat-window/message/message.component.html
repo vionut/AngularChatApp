@@ -11,9 +11,14 @@
       <i class="trash alternate icon"></i>
     </a>
   </div>
-  <div style="padding:20px" *ngIf="message.messageType == 'file'">
-    <img style="width:75px; height:75px" [src]="message.url">
+  <div style="padding:20px" *ngIf="message.messageType == 'file' && message.type.includes('image')">
+    <img style="width:75px; height:75px; cursor: pointer" [src]="message.url" (click)="openImageModal()">
   </div>
+  <a class="ui huge label" [href]="message.url" download="message.name" suiPopup [popupText]="message.name" style="padding:20px"
+    *ngIf="message.messageType == 'file' && message.type.includes('application')">
+    <i class="file icon"></i>
+  </a>
+
 
   <div *ngIf="editingMessage">
     <div class="ui form">
@@ -26,3 +31,17 @@
     </div>
   </div>
 </div>
+
+<ng-template let-context let-modal="modal" #modalTemplate>
+  <div class="content">
+    <img style="width:100%; height:100%" [src]="message.url">
+  </div>
+  <div class="actions">
+    <div class="ui animated button" tabindex="0">
+      <div class="visible content"><i class="arrow down icon"></i></div>
+      <div style="font-size: 12px;" class="hidden content">
+        Download
+      </div>
+    </div>
+  </div>
+</ng-template>

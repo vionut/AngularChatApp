@@ -10,6 +10,7 @@ import {
 import * as moment from 'moment';
 import { SendBirdService } from '../../../sendbird.service';
 import { Subscription } from 'rxjs';
+import { ModalTemplate, SuiModalService, TemplateModalConfig, ModalSize } from 'ng2-semantic-ui';
 
 @Component({
   selector: 'app-message',
@@ -29,6 +30,9 @@ export class MessageComponent implements OnInit {
   messageEdited: EventEmitter<any> = new EventEmitter<any>();
   @Output()
   messageDeleted: EventEmitter<any> = new EventEmitter<any>();
+  @ViewChild('modalTemplate')
+  public modalTemplate: ModalTemplate<null, string, string>;
+
   subs: Subscription[] = [];
 
   isEditVisible = false;
@@ -36,12 +40,19 @@ export class MessageComponent implements OnInit {
 
   isDeleteVisible = false;
 
-  constructor(public sendbirdService: SendBirdService) {}
+  constructor(public sendbirdService: SendBirdService, public modalService:SuiModalService) {}
 
   ngOnInit() {}
 
   ngOnDestroy() {
     this.subs.forEach(s => s.unsubscribe());
+  }
+
+  openImageModal() {
+    const config = new TemplateModalConfig<null, string, string>(this.modalTemplate);
+
+    config.size=ModalSize.Mini;
+    this.modalService.open(config);
   }
 
   getDateFromMoment(momentObj) {
