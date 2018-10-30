@@ -4,27 +4,26 @@
       <label>Email</label>
       <input [ngStyle]="((email.errors?.required || email.errors?.email) && (email.touched || email.dirty)) && {'border': '0.5px solid red'}"
         ngModel #email="ngModel" name="email" type="email" placeholder="Enter Email" required email>
-      <div *ngIf="email.errors?.required && (email.touched || email.dirty)" class="ui pointing red basic label">Please enter a value</div>
-      <div *ngIf="email.errors?.email && (email.touched || email.dirty)" class="ui pointing red basic label">Please enter a valid email</div>
+      <div *ngIf="email.errors?.required && (email.touched || email.dirty)" class="ui pointing red basic label">Please
+        enter a value</div>
+      <div *ngIf="email.errors?.email && (email.touched || email.dirty)" class="ui pointing red basic label">Please
+        enter a valid email</div>
     </div>
     <div class="field">
       <label>Password</label>
-      <input [ngStyle]="((pass.errors?.required || pass.errors?.passInvalid) && (pass.touched || pass.dirty)) && {'border': '0.5px solid red'}" ngModel passwd #pass="ngModel"
-        name="password" type="password" placeholder="Enter Password" required>
-      <div *ngIf="pass.errors?.required && (pass.touched || pass.dirty)" class="ui pointing red basic label">Please enter a value</div>
+      <input [ngStyle]="((pass.errors?.required || pass.errors?.passInvalid) && (pass.touched || pass.dirty)) && {'border': '0.5px solid red'}"
+        ngModel passwd #pass="ngModel" name="password" type="password" placeholder="Enter Password" required>
+      <div *ngIf="pass.errors?.required && (pass.touched || pass.dirty)" class="ui pointing red basic label">Please
+        enter a value</div>
       <div *ngIf="!pass.errors?.required && pass.errors?.passInvalid && (pass.touched || pass.dirty)" class="ui pointing red basic label">Password
         invalid! Password needs to be at least 6 charsacters long and contain uppercase, lowercase letters and numbers!</div>
     </div>
     <div style="text-align: center" class="field">
       <a [routerLink]="['/sign-up']">Don't have an account? Register!</a>
     </div>
-    <div style="text-align: center" class="field">
-      OR
-      <div>
-        <button class="ui blue button" (click)="socialSignIn('facebook')" type="button">Facebook Login</button>
-      </div>
-    </div>
     <button class="ui green button" [disabled]="form.invalid" type="submit">Submit</button>
+    <button class="ui circular facebook icon button" style="float: right" (click)="socialSignIn('facebook')" type="button"><i
+        class="facebook icon"></i></button>
   </form>
   <div *ngIf="errorMessage" style="text-align: center; margin-top:10px">
     <p style="color:red">{{errorMessage}}</p>
