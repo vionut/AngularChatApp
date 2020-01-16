@@ -1,9 +1,17 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SuiModule } from "ng2-semantic-ui";
+import { SuiModule } from 'ng2-semantic-ui';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from '@angular/common/http';
+import {
+  SocialLoginModule,
+  AuthServiceConfig,
+  GoogleLoginProvider,
+  FacebookLoginProvider
+} from 'angular-6-social-login';
+import { EmojiPickerModule } from 'ng-emoji-picker';
+import { NgDragDropModule } from 'ng-drag-drop';
 
 import { AppComponent } from './app.component';
 import { ChatComponent } from './chat/chat.component';
@@ -24,6 +32,20 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SendBirdService } from './sendbird.service';
 import { CheckPasswordDirective } from './sign-up/check-password.directive';
 
+export function getAuthServiceConfigs() {
+  let config = new AuthServiceConfig([
+    {
+      id: FacebookLoginProvider.PROVIDER_ID,
+      provider: new FacebookLoginProvider('208723553257565')
+    },
+    {
+      id: GoogleLoginProvider.PROVIDER_ID,
+      provider: new GoogleLoginProvider('Your-Google-Client-Id')
+    }
+  ]);
+  return config;
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,8 +62,22 @@ import { CheckPasswordDirective } from './sign-up/check-password.directive';
     NavbarComponent,
     CheckPasswordDirective
   ],
-  imports: [BrowserModule, AppRoutingModule, FormsModule, HttpModule, HttpClientModule, SuiModule],
-  providers: [DataService, AuthGuardService, AuthService, SendBirdService, CheckPasswordDirective],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpModule,
+    HttpClientModule,
+    SuiModule,
+    EmojiPickerModule,
+    NgDragDropModule.forRoot(),
+    SocialLoginModule
+  ],
+  providers: [DataService, AuthGuardService, AuthService, SendBirdService, CheckPasswordDirective,
+  {
+    provide: AuthServiceConfig,
+    useFactory: getAuthServiceConfigs
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

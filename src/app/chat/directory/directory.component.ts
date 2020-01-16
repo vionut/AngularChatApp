@@ -29,7 +29,7 @@ export class DirectoryComponent implements OnInit {
     this.userClicked.emit(this.chatUsers[index]);
     const otherId = this.chatUsers[index].userId;
     const id = this.chatUser.userId;
-    const createConversationSub = this.sendbirdService.createConversation(otherId, id).subscribe(
+    const createConversationSub = this.sendbirdService.createConversation([otherId, id]).subscribe(
       data => {
         console.log(data);
         this.conversationCreated.emit(data);

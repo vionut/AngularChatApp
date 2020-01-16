@@ -6,6 +6,7 @@ var path = require('path');
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
+const path = require('path');
 
 const user = require("./server/routes/user.route");
 const app = express();
@@ -41,6 +42,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/users", user);
 
-app.listen(8081, () => {
-  console.log(new Date() + " Server is listening on port " + 8081);
+app.use(express.static(__dirname + '/dist/chat-app'));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/chat-app/index.html'));
+})
+
+let port = process.env.PORT || 8081;
+
+app.listen(port, () => {
+  console.log(new Date() + " Server is listening on port " + port);
 });

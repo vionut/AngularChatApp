@@ -3,11 +3,12 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { DataService } from '../data.service';
 import { Subscription } from 'rxjs';
+import { SendBirdService } from '../sendbird.service';
 
 @Component({
   selector: 'app-navbar',
   template: `
-  <div *ngIf="token && !isExpired" class="ui menu">
+  <div *ngIf="(token && !isExpired) || socialToken" class="ui menu">
     <div class="header item">
       Angular chat
     </div>
@@ -36,8 +37,13 @@ export class NavbarComponent implements OnInit {
   token;
   isExpired;
   isAdmin;
+  socialToken;
   tokenChangedSub: Subscription;
-  constructor(public router: Router, public dataService: DataService) {
+  constructor(
+    public router: Router,
+    public dataService: DataService,
+    public sendbirdService: SendBirdService
+  ) {
     this.tokenChangedSub = dataService.tokenChanged.subscribe(data => this.init());
   }
 
@@ -53,6 +59,10 @@ export class NavbarComponent implements OnInit {
     this.token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
     const jwtHelper = new JwtHelperService();
     this.isExpired = this.token ? jwtHelper.isTokenExpired(this.token) : true;
+    if (this.isExpired) {
+      this.socialToken = localStorage.getItem('socialToken');
+    }
+    console.log(this.socialToken);
     this.isAdmin = this.token
       ? jwtHelper.decodeToken(this.token).user.role === 'admin'
         ? true
@@ -62,8 +72,15 @@ export class NavbarComponent implements OnInit {
   }
 
   onLogout() {
-    this.token = null;
-    localStorage.removeItem('token');
-    this.router.navigate(['/sign-in']);
+    this.sendbirdService.disconnectFromSb().subscribe(data => {
+      console.log(data);
+      this.token = null;
+      this.socialToken = null;
+      localStorage.removeItem('token');
+      localStorage.removeItem('socialToken');
+      localStorage.removeItem('socialId');
+      localStorage.clear();
+      this.router.navigate(['/sign-in']);
+    });
   }
 }

@@ -29,8 +29,6 @@ export class SendBirdService {
   }
 
   constructor() {
-    this.token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
-    this.user_id = this.token ? this.tokenHelper.decodeToken(this.token).user._id : null;
     this.sbClient = new SendBird({ appId: APP_ID });
     this.createChannelHandlers();
   }
@@ -53,6 +51,11 @@ export class SendBirdService {
   }
 
   connectToSb() {
+    this.token = localStorage.getItem('token') ? localStorage.getItem('token') : null;
+    this.user_id = this.token ? this.tokenHelper.decodeToken(this.token).user._id : null;
+    if (!this.user_id) {
+      this.user_id = localStorage.getItem('socialId');
+    }
     return new Observable(observer => {
       this.sbClient.connect(
         this.user_id,
@@ -64,6 +67,17 @@ export class SendBirdService {
           observer.complete();
         }
       );
+    });
+  }
+
+  disconnectFromSb() {
+    this.token = null;
+    this.user_id = null;
+    return new Observable(observer => {
+      this.sbClient.disconnect(() => {
+        observer.next('User Disconnected');
+        observer.complete();
+      });
     });
   }
 
@@ -140,17 +154,27 @@ export class SendBirdService {
   }
 
   sendMessageToChannel(channel, message) {
-    if (!message.attachments) {
-      return new Observable(observer => {
-        channel.sendUserMessage(message, (message, error) => {
-          if (error) {
-            observer.error({ ...error, message: "Couldn't send message" });
-          }
-          observer.next(message);
-          observer.complete();
-        });
+    return new Observable(observer => {
+      channel.sendUserMessage(message, (message, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't send message" });
+        }
+        observer.next(message);
+        observer.complete();
       });
-    }
+    });
+  }
+
+  sendFileMessageToChannel(channel, file) {
+    return new Observable(observer => {
+      channel.sendFileMessage(file, (message, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't send message" });
+        }
+        observer.next(message);
+        observer.complete();
+      });
+    });
   }
 
   getChannelUsers(channel) {
@@ -166,30 +190,26 @@ export class SendBirdService {
     });
   }
 
-  createConversation(otherId, id) {
+  createConversation(ids: any[]) {
     return new Observable(observer => {
-      this.sbClient.GroupChannel.createChannelWithUserIds(
-        [id, otherId],
-        true,
-        (conversation, error) => {
-          if (error) {
-            observer.error({ ...error, message: "Couldn't create conversation" });
-          }
-          this.sbClient.GroupChannel.getChannel(conversation.url, (groupChannel, error) => {
-            if (error || !groupChannel) {
-              observer.next({ conversation, isNew: true });
-            }
-            observer.next({ conversation, isNew: false });
-            observer.complete();
-          });
+      this.sbClient.GroupChannel.createChannelWithUserIds(ids, true, (conversation, error) => {
+        if (error) {
+          observer.error({ ...error, message: "Couldn't create conversation" });
         }
-      );
+        this.sbClient.GroupChannel.getChannel(conversation.url, (groupChannel, error) => {
+          if (error || !groupChannel) {
+            observer.next({ conversation, isNew: true });
+          }
+          observer.next({ conversation, isNew: false });
+          observer.complete();
+        });
+      });
     });
   }
 
   updateUserProfile(nickname, avatar) {
     return new Observable(observer => {
-      this.sbClient.updateCurrentUserInfo(nickname, avatar, (response, error) => {
+      this.sbClient.updateCurrentUserInfoWithProfileImage(nickname, avatar, (response, error) => {
         if (error) {
           observer.error({ ...error, message: "Couldn't update user profile" });
         }
