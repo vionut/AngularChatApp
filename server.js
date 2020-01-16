@@ -1,6 +1,8 @@
 require("dotenv").config();
 
 const express = require("express");
+var path = require('path');
+
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -15,7 +17,13 @@ mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
-app.use(function(req, res, next) {
+app.use(express.static(path.join(__dirname, 'dist/chat-app')));
+
+app.get('*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'dist/chat-app/index.html'));
+});
+
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -33,6 +41,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/users", user);
 
-app.listen(3005, () => {
-  console.log(new Date() + " Server is listening on port " + 3005);
+app.listen(8081, () => {
+  console.log(new Date() + " Server is listening on port " + 8081);
 });
