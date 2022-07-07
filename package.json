@@ -36,7 +36,7 @@
     "dotenv": "^6.1.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.3.0",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "mongoose": "^5.3.5",
     "ng-drag-drop": "^5.0.0",
     "ng-emoji-picker": "^6.0.1",
